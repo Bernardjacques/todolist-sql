@@ -1,0 +1,116 @@
+:root
+{
+    --primary-color: orange;
+    --secondary-color: white;
+    --theme-primary: black;
+    --theme-secondary: white;
+    --primary-background: url(images/library.jpg);
+    --theme-background: url(images/librarynight.jpg);
+}
+
+html
+{
+    font-family: 'GrundschriftRegular';
+    cursor:url(images/cursor2.png), auto;
+}
+
+body
+{
+    background-image: var(--primary-background);
+    background-repeat: no-repeat;
+    background-size: 2128px 1040px;
+}
+
+h1
+{
+    text-align: center;
+}
+
+.task_list > .todo > h3
+{
+    color: var(--primary-color);
+    font-weight: 400;
+    font-size: 2em;
+}
+.task_list
+{
+    overflow: auto;
+    background-image: url(images/notepadbg.jpg);
+    border: 1px solid rgb(151, 151, 151);
+    border-radius: 1.56rem;
+    padding: 1.56rem;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 3.125rem;
+    height: 25rem;
+    width: 31.25rem;
+    line-height: 2.3rem;
+}
+
+.task
+{
+    display: block;
+    padding-bottom: 0.62rem;
+    font-size: 1rem;
+}
+
+.todo
+{
+    padding: 1rem;
+    margin-bottom: 1rem;
+}
+
+.done
+{
+    padding: 1rem;
+}
+
+.button
+{
+font-family: 'GrundschriftRegular';
+font-weight: 900;
+font-size: 2rem;
+background: transparent;
+border: 0px;
+margin-left: 10.6rem;
+margin-top: 2.5rem;
+padding: 0.75rem;
+}
+
+p
+{
+    color: rgb(124, 124, 124);
+    text-decoration: line-through;
+}
+
+.addtask
+{
+    background-image: url(images/notepadbg.jpg);
+    border: 1px solid rgb(151, 151, 151);
+    border-radius: 1.56rem;
+    padding: 1.56rem;
+    margin-left: auto;
+    margin-right: auto;
+    height: 12.5rem;
+    width: 31.25rem;
+}
+
+.addtask > div > h2
+{
+    font-weight: 400;
+    padding-bottom: 1.5rem;
+}
+
+.addtask > p
+{
+    font-size: 0.81rem;
+}
+
+input
+{
+    cursor:url(images/cursor2.png), auto;
+}
+.dropper {
+  width: 400px;
+  height: 200px;
+}

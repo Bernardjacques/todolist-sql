@@ -1,24 +1,105 @@
 <?php
-$db = mysqli_connect("localhost","root","","todolist");
+function ConnectMySQL()
+{
+    try 
+    {
+        $db = new PDO('mysql:host=localhost;dbname=todolist;charset=utf8', 'root', 'user');
+    }   
+    catch(Exception $e) 
+    {
+        die('Erreur: ' .$e->getMessage());
+    }
 
-// Check connection
+    return $db;
+}
+  /*Sanitisation*/
+  $options = array(
+    'task' => FILTER_SANITIZE_STRING,
+    'taskline' => FILTER_SANITIZE_STRING // ID ?
+  );
+  $result = filter_input_array(INPUT_POST, $options);
+  /*fin Sanitisation*/
+  //Requête POST:
+  //vérification des valeurs après la Sanitisation
 
-if (mysqli_connect_errno())
+  if($result != null && $result != FALSE && $_SERVER['REQUEST_METHOD']=='POST')
+{
+    if(isset($_POST["add"])){
+      $task=$_POST["task"];
+      insertmysql($task, "0");
+    }
+}
+ 
+  function affichemysql($status="0")
   {
-  echo "Failed to connect to MySQL: " . mysqli_connect_error();
+    $db = ConnectMySQL();
+    $answer = $db->query('SELECT * FROM `tasks`');
+    
+    while ($line=$answer->fetch())
+    {
+       
+    if($line['status'] == $status)
+      {
+        $i = $line['id']; 
+        $txt = '<div class="draggable">';
+        $txt .= '<label class="';
+        $txt .= $status=="1"?"0":"1";
+        $txt .= '" for="">';
+        /*début : balise <input>*/
+        $txt .= '<input type="checkbox" name="taskline[]" value="';  // ID ?
+        /*$i représente le numero de la ligne*/
+        $txt .= $i.'" ';
+        /*si la valeur $archive est vraie ajouter l'attribut "checked" */
+        //$txt .= $archive=="true"?"checked":"";
+        $txt .= ">";
+        //$ligne['archive'] = true;
+        /*fin : balise <input>*/
+        /*balise fermante <label>*/
+        $txt .= $line['task'].'</label>';
+        $txt .= "<br/>";
+        $txt .= '</div>';
+        echo $txt;
+      }
+    }
   }
 
-  if (isset($_POST['submit'])) {
-    if (empty($_POST['task'])) {
-        $errors = "You must fill in the task";
-    }else{
-        $task = $_POST['task'];
-        $sql = "INSERT INTO tâches (tâche) VALUES ('$task')";
-        mysqli_query($db, $sql);
-        header('location: formjson.php');
-    }
-}	
+  function insertmysql($task, $status)
+  {
+    $db = ConnectMySQL();
+    $req = $db->prepare("INSERT INTO tasks(task, status) VALUES(:task, :status)");
+    $req->execute(array(
+        "task" => $task,
+        "status" => $status
+  ));
+    
+  }
+
+  function updatemysql($id)
+  {
+    $db = ConnectMySQL();
+    $answer = $db->prepare("SELECT * FROM tasks WHERE id = :id LIMIT 0,1"); 
+    $answer->execute(array(
+        "id" => $id,
+        ));
+    $line = $answer->fetch();
+    $status = $line["status"] == "1" ? "0": "1";
+    $req = $db->prepare("UPDATE tasks SET status = :status WHERE id = :id");
+    $req->execute(array(
+        "id" => $id,
+        "status" => $status
+        ));
+  }
+
+  function deletemysql($id)
+  {
+    $db = ConnectMySQL();
+    $answer = $db->prepare("DELETE FROM tasks WHERE id = :id"); 
+    $answer->execute(array(
+        "id" => $id,
+        ));
+  }
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -51,20 +132,17 @@ if (mysqli_connect_errno())
             <div class="todo">
                 <h3>À Faire</h3>
                 <form action="formjson.php" method="POST">
-                <?php 
-                    // select all tasks if page is visited or refreshed
-                    $tâches = mysqli_query($db, "SELECT * FROM tâche");
+               
+                <?php affichemysql("0"); ?>
 
-                    $i = 1; while ($row = mysqli_fetch_array($tâches)) { 
-                ?>
-                    <input class="button" type="submit" name="submit" value="Enregistrer">
+                    <input class="button" type="submit" name="submit" value="Archiver">
                 </form>
             </div>
             <div class="done">
                 <h3>Archive</h3>
-                <p>
-
-                </p>
+                <?php affichemysql("1"); ?>
+                <input class="button" type="submit" name="back" value="Refaire">
+                <input class="button" type="submit" name="Supprimer" value="Supprimer"> 
             </div>
         </section>
         <section class="addtask">
@@ -75,8 +153,8 @@ if (mysqli_connect_errno())
                 <p><?php echo $errors; ?></p>
                 <?php } ?>
                     <label for="task">La tâche à effectuer</label>
-                    <input type="text" name="tache" value="">
-                    <input type="submit" name="ajouter" value="Ajouter">
+                    <input type="text" name="task" value="">
+                    <input type="submit" name="add" value="Ajouter">
                 </form>
             </div>
         </section>

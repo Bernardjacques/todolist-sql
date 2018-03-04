@@ -133,7 +133,8 @@ catch(Exception $erreur) {
                         $resultArr = $result->fetchAll(PDO::FETCH_ASSOC);
                         foreach ($resultArr as $task)
                         {
-                            print $task["task"] . "-" . $status["0"];
+                            
+                            print $task["task"] . "-" . $task["status"];
                             echo "<input type='checkbox' name='tache[]' value='".($donnees['nomtache'])."'/>
                             <label for='choix'>".($donnees['nomtache'])."</label><br />";
                         }

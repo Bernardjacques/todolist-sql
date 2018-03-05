@@ -1,11 +1,9 @@
-$(".header--theme-button").on("click", function() {
-    var primaryColor = $(this).css("--theme-primary");
-    var secondaryColor = $(this).css("--theme-secondary");
-    var primarybackground = $(this).css("--secondary-background");
+function swapStyleSheet(sheet) {
+    document.getElementById("pagestyle").setAttribute("href", sheet);  
+}
 
-    $(".header--theme-button").removeClass("active");
-    $(this).addClass("active");
+    var style1 = document.getElementById("stylesheet1");
+    var style2 = document.getElementById("stylesheet2");
 
-    $(document.body).css("--primary-color", primaryColor);
-    $(document.body).css("--secondary-color", secondaryColor);
-    });
+    style1.onclick = function () { swapStyleSheet("style.css") };
+    style2.onclick = function () { swapStyleSheet("dark.css"); };

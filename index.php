@@ -1,7 +1,7 @@
 <?php
  
 try {
-    $db = new PDO('mysql:host=localhost;dbname=todolist;charset=utf8', 'root', 'user');
+    $db = new PDO('mysql:host=localhost;dbname=id4956572_todolist;charset=utf8', 'id4956572_nhanar', 'user64');
 }   
 
 catch(Exception $erreur) {

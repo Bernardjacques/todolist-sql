@@ -10,7 +10,7 @@ catch(Exception $erreur) {
 }
 
   $options = array(
-    'task' => FILTER_SANITIZE_STRING
+    'newtask' => FILTER_SANITIZE_STRING
   );
   $result = filter_input_array(INPUT_POST, $options);
 
